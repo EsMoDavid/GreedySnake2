@@ -1,0 +1,55 @@
+﻿<UserControl
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:GreedySnake"
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+            xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+            xmlns:Controls="clr-namespace:GreedySnake.Controls" 
+            x:Class="GreedySnake.Views.GameBoxView"
+            xmlns:views="clr-namespace:GreedySnake.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ItemsPanelTemplate x:Key="SnakeControlTemplate">
+            <Grid x:Name="SnakeRootPanel" IsItemsHost="True">
+                <i:Interaction.Behaviors>
+                    <local:SnakeRootBehavior ColumnsCount="30" RowsCount="30"/>
+                </i:Interaction.Behaviors>
+            </Grid>
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="BlockTemplate">
+            <Border Background="{Binding Color}" />
+        </DataTemplate>
+        <Style x:Key="SnakeControlStyle" TargetType="{x:Type ItemsControl}">
+            <Setter Property="ItemsSource" Value="{Binding Snake}" />
+            <Setter Property="ItemsPanel" Value="{StaticResource SnakeControlTemplate}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <Grid>
+                            <views:GridLinePanel ColumnsCount="{Binding Width}" RowsCount="{Binding Height}" />
+                            <Grid x:Name="FoodPanel">
+                                <i:Interaction.Behaviors>
+                                    <local:SnakeRootBehavior ColumnsCount="{Binding Width}" RowsCount="{Binding Height}" />
+                                </i:Interaction.Behaviors>
+                                <Border x:Name="Food" Visibility="Collapsed"/>
+                            </Grid>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource SnakeBlockStyle}" />
+            <Setter Property="ItemTemplate" Value="{StaticResource BlockTemplate}" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Controls:SnakeControl
+            Style="{StaticResource SnakeControlStyle}">
+        </Controls:SnakeControl>
+    </Grid>
+</UserControl>
