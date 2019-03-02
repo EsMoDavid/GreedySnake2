@@ -12,9 +12,18 @@ namespace GreedySnake.ViewModels
 {
     public class GameBoxViewModel:INotifyPropertyChanged
     {
-        private int height=30;
-        private int width=30;
+        private int height = 30;
+        private int width = 30;
+        private bool isDead = false;
+        Direction? lastDirection;
+        DispatcherTimer timerInterval;
+        Random rnd;
+        List<int> totalCells;
 
+        public ArrowKeyCommand ArrowKeyCommand
+        {
+            get;private set;
+        }
         public int Width
         {
             get
@@ -45,25 +54,32 @@ namespace GreedySnake.ViewModels
                 }
             }
         }
+        public bool IsDead
+        {
+            get
+            {
+                return this.isDead;
+            }
+            set
+            {
+                if (this.isDead != value)
+                {
+                    this.isDead = value;
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CheckIfDead)));
+                }
+            }
+        }
         public Food CurrentFood { get; private set; }
-        public SolidColorBrush GridLineBrush { get; private set; }
         public Snake Snake { get; private set; }
-        public event EventHandler<Food> FoodGenerated;
-        public event EventHandler GameOver;
-        public event EventHandler GameStarted;
         public event PropertyChangedEventHandler PropertyChanged;
-
-        Direction? lastDirection;
-        DispatcherTimer timerInterval;
-        Random rnd;
-        List<int> totalCells;
-        
+     
         public GameBoxViewModel()
         {
             int width = this.Width;
             int height = this.Height;
             int totalCount = width * height;
             this.totalCells = new List<int>(totalCount);
+            this.CurrentFood = new Food();
             for (int i = 0; i < totalCount; i++)
             {
                 totalCells.Add(i);
@@ -73,14 +89,13 @@ namespace GreedySnake.ViewModels
             this.timerInterval.Interval = TimeSpan.FromMilliseconds(200);
             this.timerInterval.Tick += TimerInterval_Tick;
             this.Snake = new Snake(new Position(width / 2, height / 2));
-            this.GridLineBrush = new SolidColorBrush(Colors.Gray);
+            this.ArrowKeyCommand = new ArrowKeyCommand();
         }
 
         public void StartGame()
         {
             this.GenerateFood();
             this.timerInterval.Start();
-            this.GameStarted?.Invoke(this, EventArgs.Empty);
         }
         public void StopGame()
         {
@@ -132,9 +147,8 @@ namespace GreedySnake.ViewModels
                 this.Snake.Eat(this.CurrentFood);
                 this.GenerateFood();
             }
-            else if (IsDead(target))
+            else if (CheckIfDead(target))
             {
-                this.GameOver?.Invoke(this, EventArgs.Empty);
                 this.StopGame();
             }
             else
@@ -143,7 +157,7 @@ namespace GreedySnake.ViewModels
                 this.lastDirection = direction;
             }
         }
-        private bool IsDead(Position target)
+        private bool CheckIfDead(Position target)
         {
             bool isOutofBounds = target.X < 0 || target.Y < 0 || target.X >= this.Width || target.Y >= this.Height;
             if (isOutofBounds)
@@ -212,10 +226,7 @@ namespace GreedySnake.ViewModels
             int position = availableCells[rndIndex];
             int x = position % this.Width;
             int y = position / this.Height;
-            Food food = new Food();
-            food.Position = new Position(x, y);
-            this.CurrentFood = food;
-            this.FoodGenerated?.Invoke(this, food);
+            this.CurrentFood.Position = new Position(x, y);
         }
     }
 }

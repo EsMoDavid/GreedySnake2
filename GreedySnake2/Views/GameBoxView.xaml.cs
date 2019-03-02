@@ -26,5 +26,10 @@ namespace GreedySnake.Views
             InitializeComponent();
             this.DataContext = new GameBoxViewModel();
         }
+
+        private void GameBoxView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Focus();
+        }
     }
 }

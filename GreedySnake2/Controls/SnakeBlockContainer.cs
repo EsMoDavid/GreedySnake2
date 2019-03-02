@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 
 namespace GreedySnake.Controls
 {
-    public class SnakeBlockControl : ContentControl
+    public class SnakeBlockContainer : ContentControl
     {
-        static SnakeBlockControl()
+        static SnakeBlockContainer()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(SnakeBlockControl), new FrameworkPropertyMetadata(typeof(SnakeBlockControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SnakeBlockContainer), new FrameworkPropertyMetadata(typeof(SnakeBlockContainer)));
         }
     }
 }

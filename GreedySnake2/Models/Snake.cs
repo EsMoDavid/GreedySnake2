@@ -8,25 +8,7 @@ namespace GreedySnake.Models
     public class Snake:ObservableCollection<Block>, INotifyPropertyChanged
     {
         private int defaultBlocksCount;
-        private int ateCount;
-        public int AteCount
-        {
-            get
-            {
-                return this.ateCount;
-            }
-            set
-            {
-                if (this.ateCount != value)
-                {
-                    this.ateCount = value;
-                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AteCount)));
-                }
-            }
-        }
         const int DefaultBlocksCount = 3;
-        public event EventHandler Moved;
-        public event EventHandler<Block> Ate;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Position Location
@@ -62,8 +44,6 @@ namespace GreedySnake.Models
             };
             this.Insert(0, block);
             this[0].IsHead = true;
-            this.AteCount = this.Count - this.defaultBlocksCount;
-            this.Ate?.Invoke(this, block);
         }
         public void Move(Position p)
         {
@@ -74,7 +54,6 @@ namespace GreedySnake.Models
             this.RemoveAt(lastIndex);
             this.Insert(0, last);
             last.IsHead = true;
-            this.Moved?.Invoke(this, EventArgs.Empty);
         }
     }
 }

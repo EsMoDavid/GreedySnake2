@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.Expression.Prototyping.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.RegularExpressions" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,9 +61,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\SnakeControl.cs" />
-    <Compile Include="Controls\SnakeBlockControl.cs" />
+    <Compile Include="Controls\SnakeBlockContainer.cs" />
+    <Compile Include="SceneItemTemplateSelector.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="SnakeRootBehavior.cs" />
+    <Compile Include="ViewModels\ArrowKeyCommand.cs" />
     <Compile Include="Views\GridLinePanel.cs" />
     <Page Include="Views\GameBoxView.xaml">
       <SubType>Designer</SubType>

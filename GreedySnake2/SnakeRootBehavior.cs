@@ -9,7 +9,7 @@ using System.Windows.Interactivity;
 
 namespace GreedySnake
 {
-    public class SnakeRootBehavior:Behavior<Grid>
+    public class RootGridBehavior:Behavior<Grid>
     {
         public int RowsCount
         {
@@ -19,7 +19,7 @@ namespace GreedySnake
 
         // Using a DependencyProperty as the backing store for RowCount.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RowsCountProperty =
-            DependencyProperty.Register("RowsCount", typeof(int), typeof(SnakeRootBehavior), new PropertyMetadata(0));
+            DependencyProperty.Register("RowsCount", typeof(int), typeof(RootGridBehavior), new PropertyMetadata(0));
 
 
         public int ColumnsCount
@@ -30,7 +30,7 @@ namespace GreedySnake
 
         // Using a DependencyProperty as the backing store for ColumnsCount.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ColumnsCountProperty =
-            DependencyProperty.Register("ColumnsCount", typeof(int), typeof(SnakeRootBehavior), new PropertyMetadata(0));
+            DependencyProperty.Register("ColumnsCount", typeof(int), typeof(RootGridBehavior), new PropertyMetadata(0));
 
         protected override void OnAttached()
         {

@@ -9,22 +9,14 @@
             xmlns:Controls="clr-namespace:GreedySnake.Controls" 
             x:Class="GreedySnake.Views.GameBoxView"
             xmlns:views="clr-namespace:GreedySnake.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"   Focusable="True"
+            Loaded="GameBoxView_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <UserControl.Resources>
-        <ItemsPanelTemplate x:Key="SnakeControlTemplate">
-            <Grid x:Name="SnakeRootPanel" IsItemsHost="True">
-                <i:Interaction.Behaviors>
-                    <local:SnakeRootBehavior ColumnsCount="30" RowsCount="30"/>
-                </i:Interaction.Behaviors>
-            </Grid>
-        </ItemsPanelTemplate>
-        <DataTemplate x:Key="BlockTemplate">
-            <Border Background="{Binding Color}" />
-        </DataTemplate>
         <Style x:Key="SnakeControlStyle" TargetType="{x:Type ItemsControl}">
             <Setter Property="ItemsSource" Value="{Binding Snake}" />
-            <Setter Property="ItemsPanel" Value="{StaticResource SnakeControlTemplate}" />
+            <Setter Property="ItemsPanel" Value="{StaticResource SnakeControlPanelTemplate}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ItemsControl}">
@@ -32,21 +24,37 @@
                             <views:GridLinePanel ColumnsCount="{Binding Width}" RowsCount="{Binding Height}" />
                             <Grid x:Name="FoodPanel">
                                 <i:Interaction.Behaviors>
-                                    <local:SnakeRootBehavior ColumnsCount="{Binding Width}" RowsCount="{Binding Height}" />
+                                    <local:RootGridBehavior ColumnsCount="{Binding Width}" RowsCount="{Binding Height}" />
                                 </i:Interaction.Behaviors>
-                                <Border x:Name="Food" Visibility="Collapsed"/>
+                                <Border x:Name="Food" Background="Green" DataContext="{Binding CurrentFood}" 
+                                        Grid.Row="{Binding Position.Y}" Grid.Column="{Binding Position.X}" />
                             </Grid>
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                    Background="{TemplateBinding Background}" 
+                                    Padding="{TemplateBinding Padding}" 
+                                    SnapsToDevicePixels="true">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource SnakeBlockStyle}" />
-            <Setter Property="ItemTemplate" Value="{StaticResource BlockTemplate}" />
+            <Setter Property="ItemTemplateSelector">
+                <Setter.Value>
+                    <local:SceneItemTemplateSelector BlockTemplate="{StaticResource BlockTemplate}"
+                                                     HeadTemplate="{StaticResource HeadTemplate}" />
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding ArrowKeyCommand}" ></KeyBinding>
+    </UserControl.InputBindings>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <ei:CallMethodAction TargetObject="{Binding DataContext,RelativeSource={RelativeSource AncestorType=views:GameBoxView}}" MethodName="StartGame" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Controls:SnakeControl
             Style="{StaticResource SnakeControlStyle}">

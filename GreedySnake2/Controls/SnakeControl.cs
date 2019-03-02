@@ -22,11 +22,11 @@ namespace GreedySnake.Controls
         }
         protected override bool IsItemItsOwnContainerOverride(object item)
         {
-            return item is SnakeControl;
+            return item is SnakeBlockContainer;
         }
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        protected override DependencyObject GetContainerForItemOverride()
         {
-            base.PrepareContainerForItemOverride(element, item);
+            return new SnakeBlockContainer();
         }
     }
 }
