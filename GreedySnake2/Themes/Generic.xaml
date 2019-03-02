@@ -28,9 +28,6 @@
         </Grid>
     </ItemsPanelTemplate>
     <DataTemplate x:Key="BlockTemplate">
-        <Border Background="Black"/>
-    </DataTemplate>
-    <DataTemplate x:Key="HeadTemplate">
-        <Border Background="Red"/>
+        <Border Background="{Binding Color}"/>
     </DataTemplate>
 </ResourceDictionary>

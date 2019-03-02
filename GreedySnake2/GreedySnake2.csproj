@@ -62,7 +62,6 @@
     </ApplicationDefinition>
     <Compile Include="Controls\SnakeControl.cs" />
     <Compile Include="Controls\SnakeBlockContainer.cs" />
-    <Compile Include="SceneItemTemplateSelector.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="SnakeRootBehavior.cs" />
     <Compile Include="ViewModels\ArrowKeyCommand.cs" />

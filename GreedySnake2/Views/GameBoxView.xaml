@@ -17,6 +17,7 @@
         <Style x:Key="SnakeControlStyle" TargetType="{x:Type ItemsControl}">
             <Setter Property="ItemsSource" Value="{Binding Snake}" />
             <Setter Property="ItemsPanel" Value="{StaticResource SnakeControlPanelTemplate}" />
+            <Setter Property="ItemTemplate" Value="{StaticResource BlockTemplate}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ItemsControl}">
@@ -39,16 +40,13 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="ItemTemplateSelector">
-                <Setter.Value>
-                    <local:SceneItemTemplateSelector BlockTemplate="{StaticResource BlockTemplate}"
-                                                     HeadTemplate="{StaticResource HeadTemplate}" />
-                </Setter.Value>
-            </Setter>
         </Style>
     </UserControl.Resources>
     <UserControl.InputBindings>
-        <KeyBinding Key="Up" Command="{Binding ArrowKeyCommand}" ></KeyBinding>
+        <KeyBinding Key="Up" Command="{Binding ArrowKeyCommand}" CommandParameter="Up" ></KeyBinding>
+        <KeyBinding Key="Down" Command="{Binding ArrowKeyCommand}" CommandParameter="Down" ></KeyBinding>
+        <KeyBinding Key="Left" Command="{Binding ArrowKeyCommand}" CommandParameter="Left" ></KeyBinding>
+        <KeyBinding Key="Right" Command="{Binding ArrowKeyCommand}" CommandParameter="Right" ></KeyBinding>
     </UserControl.InputBindings>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

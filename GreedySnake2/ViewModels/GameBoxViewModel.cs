@@ -89,7 +89,25 @@ namespace GreedySnake.ViewModels
             this.timerInterval.Interval = TimeSpan.FromMilliseconds(200);
             this.timerInterval.Tick += TimerInterval_Tick;
             this.Snake = new Snake(new Position(width / 2, height / 2));
-            this.ArrowKeyCommand = new ArrowKeyCommand();
+            this.ArrowKeyCommand = new ArrowKeyCommand((p) =>
+            {
+                Key key = (Key)Enum.Parse(typeof(Key), p.ToString());
+                switch (key)
+                {
+                    case Key.Up:
+                    case Key.Down:
+                    case Key.Left:
+                    case Key.Right:
+                        var direction = this.KeyToDirection(key);
+                        if (!this.IsOpposite(direction.Value))
+                        {
+                            this.lastDirection = direction;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         public void StartGame()
@@ -100,24 +118,6 @@ namespace GreedySnake.ViewModels
         public void StopGame()
         {
             this.timerInterval.Stop();
-        }
-        public void AcceptedKey(Key key)
-        {
-            switch (key)
-            {
-                case Key.Up:
-                case Key.Down:
-                case Key.Left:
-                case Key.Right:
-                    var direction = this.KeyToDirection(key);
-                    if (!this.IsOpposite(direction.Value))
-                    {
-                        this.lastDirection = direction;
-                    }
-                    break;
-                default:
-                    break;
-            }
         }
         private void TimerInterval_Tick(object sender, EventArgs e)
         {
