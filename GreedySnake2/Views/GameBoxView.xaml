@@ -12,8 +12,36 @@
              mc:Ignorable="d"   Focusable="True"
             Loaded="GameBoxView_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <UserControl.Resources>
+        <Style TargetType="views:GameOverView" x:Key="VisibleAnimation">
+            <Style.Resources>
+                <Storyboard x:Key="WindowShowStoryboard">
+                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="{x:Null}">
+                        <EasingDoubleKeyFrame KeyTime="0" Value="-120"/>
+                        <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="20"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </Style.Resources>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource WindowShowStoryboard}" ></BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="SnakeControlStyle" TargetType="{x:Type ItemsControl}">
             <Setter Property="ItemsSource" Value="{Binding Snake}" />
             <Setter Property="ItemsPanel" Value="{StaticResource SnakeControlPanelTemplate}" />
@@ -42,6 +70,9 @@
             </Setter>
         </Style>
     </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded" SourceName="GameOverView"/>
+    </UserControl.Triggers>
     <UserControl.InputBindings>
         <KeyBinding Key="Up" Command="{Binding ArrowKeyCommand}" CommandParameter="Up" ></KeyBinding>
         <KeyBinding Key="Down" Command="{Binding ArrowKeyCommand}" CommandParameter="Down" ></KeyBinding>
@@ -55,7 +86,8 @@
     </i:Interaction.Triggers>
     <Grid>
         <Controls:SnakeControl
-            Style="{StaticResource SnakeControlStyle}">
-        </Controls:SnakeControl>
+            Style="{StaticResource SnakeControlStyle}"/>
+        <views:GameOverView x:Name="GameOverView" Visibility="{Binding IsDead,Converter={StaticResource HiddenBoolConverter}}"
+                            Grid.RowSpan="2" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Style="{StaticResource VisibleAnimation}" />
     </Grid>
 </UserControl>

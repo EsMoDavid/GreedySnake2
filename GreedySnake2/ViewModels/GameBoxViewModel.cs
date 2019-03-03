@@ -15,15 +15,15 @@ namespace GreedySnake.ViewModels
         private int height = 30;
         private int width = 30;
         private bool isDead = false;
+        private Snake snake;
         Direction? lastDirection;
         DispatcherTimer timerInterval;
         Random rnd;
         List<int> totalCells;
 
-        public ArrowKeyCommand ArrowKeyCommand
-        {
-            get;private set;
-        }
+        public ArrowKeyCommand ArrowKeyCommand { get; private set; }
+        public DefaultCommand TryAgainCommand { get; private set; }
+        public DefaultCommand ExitCommand { get; private set; }
         public int Width
         {
             get
@@ -65,14 +65,25 @@ namespace GreedySnake.ViewModels
                 if (this.isDead != value)
                 {
                     this.isDead = value;
-                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CheckIfDead)));
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDead)));
                 }
             }
         }
         public Food CurrentFood { get; private set; }
-        public Snake Snake { get; private set; }
+        public Snake Snake
+        {
+            get { return this.snake; }
+            set
+            {
+                if (this.snake != value)
+                {
+                    this.snake = value;
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Snake)));
+                }
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
-     
+
         public GameBoxViewModel()
         {
             int width = this.Width;
@@ -108,6 +119,12 @@ namespace GreedySnake.ViewModels
                         break;
                 }
             });
+            this.TryAgainCommand = new DefaultCommand((p) => this.ResetGame());
+            this.ExitCommand = new DefaultCommand((p) =>
+              {
+                  this.StopGame();
+                  Application.Current.Shutdown();
+              });
         }
 
         public void StartGame()
@@ -126,7 +143,14 @@ namespace GreedySnake.ViewModels
                 this.MoveSnake(this.lastDirection.Value);
             }
         }
-
+        private void ResetGame()
+        {
+            this.StopGame();
+            this.Snake = new Snake(new Position(width / 2, height / 2));
+            this.lastDirection = null;
+            this.IsDead = false;
+            this.StartGame();
+        }
         private bool IsOpposite(Direction target)
         {
             if (!this.lastDirection.HasValue)
@@ -149,6 +173,7 @@ namespace GreedySnake.ViewModels
             }
             else if (CheckIfDead(target))
             {
+                this.IsDead = true;
                 this.StopGame();
             }
             else
